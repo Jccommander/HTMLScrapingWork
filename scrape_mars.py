@@ -1,6 +1,7 @@
 from splinter import Browser
 from bs4 import BeautifulSoup
 import pandas as pd
+import time
 
 def init_browser():
     executable_path = {'executable_path': '/usr/local/bin/chromedriver'}
@@ -25,11 +26,8 @@ def scrape():
 
     news_p = articles.find('div', class_="article_teaser_body").text
 
-    news_dict = {
-        "news_title":news_title,
-        "news_p":news_p}
-
-    mars_data_dict.append(news_dict)
+    mars_data_dict["news_title"] = news_title
+    mars_data_dict["news_p"] = news_p
 
     # NASA Featured Mars Images scraping segment
 
@@ -40,6 +38,10 @@ def scrape():
 
     # Use splinter to click the full image button in order to retrieve appropriate url
     browser.click_link_by_partial_text('FULL IMAGE')
+
+    # Use time.sleep to allow the html a second to load before trying to use Soup on it
+
+    time.sleep(10)
 
     # Use beautiful soup to read html page
 
@@ -68,9 +70,7 @@ def scrape():
 
     featured_image_url = "https://www.jpl.nasa.gov/" + image
 
-    featured_image_dict = {"featured_image_url":featured_image_url}
-
-    mars_data_dict.append(featured_image_dict)
+    mars_data_dict["featured_image_url"] = featured_image_url
 
     # Mars Twitter Weather Data scraping segment
 
@@ -106,7 +106,7 @@ def scrape():
             mars_weather = tweet_text
             break
 
-    weather_dict = {"mars_weather":mars_weather}
+    mars_data_dict["mars_weather"] = mars_weather
 
     # Space Facts scraping segment
 
@@ -125,9 +125,7 @@ def scrape():
     # Render the dataframe as an html table string
     html_df = df.to_html()
 
-    facts_dict = {"fact_table":html_df}
-
-    mars_data_dict.append(facts_dict)
+    mars_data_dict["fact_table"] = html_df
 
     # Mars Hemispheres scraping segment
 
@@ -195,9 +193,7 @@ def scrape():
         browser.click_link_by_partial_text("Back")
     
     # Append the image urls dictionary to the main dictionary
-    mars_data_dict.append(hemisphere_image_urls)
-
-    # @TODO: DON'T FORGET MONGO SIDE COMMITMENT OF SCRAPED INFO
+    mars_data_dict["mars_image_urls"] = hemisphere_image_urls
 
     # Lastly, return the results of the scraping
     return mars_data_dict
