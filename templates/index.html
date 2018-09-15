@@ -21,7 +21,7 @@
         </div>
         <div class="col-md-9">
             <h2>Featured Mars Image</h2>
-            <img src="{{listings.featured_image_url}}" height=400px>
+            <img src="{{listings.featured_image_url}}" height=600px>
         </div>
         <div class="col-md-3">
             <div style="border:3px solid gray; padding:10px">
@@ -29,7 +29,9 @@
                 <p>{{listings.mars_weather}}</p>
             </div>
             <div>
-                {{listings.fact_table}}
+                <br>
+                <h5> Facts About Mars </h5>
+                {{html}}
             </div>
             <br>
         </div>

@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect
+from flask import Flask, render_template, redirect, Markup
 from flask_pymongo import PyMongo
 import scrape_mars
 
@@ -13,7 +13,8 @@ mongo = PyMongo(app)
 @app.route("/")
 def index():
     listings = mongo.db.listings.find_one()
-    return render_template("index.html", listings=listings)
+    html = Markup(listings["fact_table"])
+    return render_template("index.html", listings=listings, html=html)
 
 # Define the scraper route, have it retrieve the mongo DB listings, perform the scraping call and then
 # update the DB with the new information. Redirect the user once done
